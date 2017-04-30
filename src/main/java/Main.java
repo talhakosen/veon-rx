@@ -12,6 +12,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class Main {
     public static void main(String[] args) {
-        Observable.interval(100, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.computation());
+        Observable.interval(100, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.computation())
+                .map(new Function<Long, String>() {
+                    @Override
+                    public String apply(Long along) throws Exception {
+                        return along.toString();
+                    }
+                });
     }
+
 }
