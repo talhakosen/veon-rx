@@ -15,9 +15,15 @@ import java.util.concurrent.TimeUnit;
 public class Main {
     public static void main(String[] args) {
 
-        getObservable().subscribe(getObserver("o1"));
-        getObservable().subscribe(getObserver("o2"));
-        getObservable().subscribe(getObserver("o3"));
+        ConnectableObservable<String> connObservable = getObservable().publish();
+
+        connObservable.subscribe(getObserver("Observer1"));
+
+        connObservable.subscribe(getObserver("Observer2"));
+
+        connObservable.subscribe(getObserver("Observer3"));
+
+        connObservable.connect();
     }
 
     private static Observable<String> getObservable() {
