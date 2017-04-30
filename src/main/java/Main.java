@@ -18,7 +18,7 @@ public class Main {
                     public String apply(Long along) throws Exception {
                         return along.toString();
                     }
-                });
+                }).delay(200, TimeUnit.MILLISECONDS, Schedulers.trampoline());
     }
 
 }
