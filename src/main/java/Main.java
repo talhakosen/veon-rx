@@ -4,33 +4,31 @@ import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by tctkosen on 4/29/17.
  */
-public class Main {
+public class Main implements MainView, MainRepository {
     static Scanner in;
 
     public static void main(String[] args) {
+        Main main = new Main();
 
-        ConnectableObservable<String> connObservable = getObservable().publish();
-
-        connObservable.subscribe(getObserver("Observer1"));
-
-        connObservable.subscribe(getObserver("Observer2"));
-
-        connObservable.subscribe(getObserver("Observer3"));
-
-        connObservable.connect();
+        MainPresenter mainPresenter = new MainPresenter(main, main);
+        mainPresenter.bind();
 
         in = new Scanner(System.in);
         if (in != null && in.nextLine().equalsIgnoreCase("exit")) ;
         return;
     }
 
-    private static Observable<String> getObservable() {
+
+    @Override
+    public Observable<String> getInterval() {
         return Observable.interval(100, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<Long, String>() {
@@ -42,22 +40,18 @@ public class Main {
                 .delay(200, TimeUnit.MILLISECONDS, Schedulers.trampoline());
     }
 
-    private static Observer<String> getObserver(final String identifier) {
-        return new DisposableObserver<String>() {
-            @Override
-            public void onNext(String s) {
-                System.out.println(identifier + " " + s);
-            }
+    @Override
+    public void writeToScreenListener1(String text) {
+        System.out.println("Listener1 : " + text);
+    }
 
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-            }
+    @Override
+    public void writeToScreenListener2(String text) {
+        System.out.println("Listener2 : " + text);
+    }
 
-            @Override
-            public void onComplete() {
-                System.out.println("Completed");
-            }
-        };
+    @Override
+    public void writeToScreenListener3(String text) {
+        System.out.println("Listener3 : " + text);
     }
 }
